@@ -1,0 +1,38 @@
+
+docker build \
+  --build-arg URL_BY_CATEGORY=https://es.aliexpress.com/category/204028002/wearable-devices.html?category_redirect=1&spm=a2g0o.productlist.105.29.7c7a4e2cjIB3vv&CatId=204028002&trafficChannel=main&isCategoryBrowse=true&g=y&page=%s \
+  --build-arg CATEGORY_LEVEL1=Celulares y telecomunicaciones \
+  --build-arg CATEGORY_LEVEL2=Electrónica \
+  --build-arg CATEGORY_LEVEL3=Dispositivos Inteligentes \
+  --build-arg N_PAGES=50 \
+  --build-arg NAME_LINKS_PATH=data_extracted/links_dispositivos_inteligentes.csv \
+  --build-arg NAME_SAVED_PATH=data_extracted/dispositivos_inteligentes.csv \
+  -t myproject .
+
+docker run \
+  --env URL_BY_CATEGORY='https://es.aliexpress.com/category/204028002/wearable-devices.html?category_redirect=1&spm=a2g0o.productlist.105.29.7c7a4e2cjIB3vv&CatId=204028002&trafficChannel=main&isCategoryBrowse=true&g=y&page=%s'\
+  --env CATEGORY_LEVEL1='Celulares y telecomunicaciones'\
+  --env CATEGORY_LEVEL2='Electrónica' \
+  --env CATEGORY_LEVEL3='Dispositivos Inteligentes' \
+  --env N_PAGES=1 \
+  --env NAME_LINKS_FILE='links_dispositivos_inteligentes.csv' \
+  --env NAME_DATA_EXTRACTED_FILE='dispositivos_inteligentes.csv' \
+  --name cela4 ali-express-crawler
+
+
+URL_BY_CATEGORY=https://es.aliexpress.com/category/205896701/cover-up.html?category_redirect=1&spm=a2g0o.productlist.101.15.c66a4b32hVlrcR&CatId=205896701&trafficChannel=main&isCategoryBrowse=true&g=y&page=%s
+CATEGORY_LEVEL1=Moda Mujer
+CATEGORY_LEVEL2=Bañadores
+CATEGORY_LEVEL3=Vestidos de playa
+N_PAGES=50
+NAME_LINKS_PATH=data_extracted/links_vestidos_playa.csv
+NAME_SAVED_PATH=data_extracted/vestidos-de-playa.csv
+
+
+URL_BY_CATEGORY=https://es.aliexpress.com/category/204006047/cellphones.html?category_redirect=1&spm=a2g0o.productlist.103.9.7a771f04VEePhG&CatId=204006047&trafficChannel=main&isCategoryBrowse=true&g=y&page=%s
+CATEGORY_LEVEL1=Celulares y telecomunicaciones
+CATEGORY_LEVEL2=Marcas populares
+CATEGORY_LEVEL3=Teléfonos móviles
+N_PAGES=60
+NAME_LINKS_PATH=data_extracted/links-telefonos_populares.csv
+NAME_SAVED_PATH=data_extracted/telefonos-moviles-populares.csv

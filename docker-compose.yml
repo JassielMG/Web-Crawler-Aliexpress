@@ -1,0 +1,15 @@
+version: '3'
+services:
+  celulares-populares2:
+    image: ali-crawler2
+    volumes:
+      - /Users/jassielmg/Documents/data_extracted:/app/data_extracted:rw
+    environment:
+        - URL_BY_CATEGORY=https://es.aliexpress.com/category/204006047/cellphones.html?category_redirect=1&spm=a2g0o.productlist.103.9.7a771f04VEePhG&CatId=204006047&trafficChannel=main&isCategoryBrowse=true&g=y&page=%s
+        - CATEGORY_LEVEL1=Celulares y telecomunicaciones
+        - CATEGORY_LEVEL2=Marcas populares
+        - CATEGORY_LEVEL3=Teléfonos móviles
+        - N_PAGES=1
+        - NAME_LINKS_FILE=links_celulares_populares_20230715.csv
+        - NAME_DATA_EXTRACTED_FILE=celulares_populares_20230715.csv
+
