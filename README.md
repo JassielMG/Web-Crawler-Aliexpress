@@ -31,6 +31,7 @@ The variables you need to configure are as follows:
 - `CATEGORY_LEVEL2`: Level 2 of the category.
 - `CATEGORY_LEVEL3`: Level 3 of the category.
 - `N_PAGES`: Number of pages to consider for the category.
+- `MAX_RETRIES`: Number of retries in case of connection failure.
 - `NAME_LINKS_PATH`: Path and filename to store the extracted links.
 - `NAME_SAVED_PATH`: Path and filename of the output file to save the extracted data.
 
@@ -68,8 +69,9 @@ services:
         - CATEGORY_LEVEL2=Marcas populares
         - CATEGORY_LEVEL3=Teléfonos móviles
         - N_PAGES=1
-        - NAME_LINKS_FILE=links_celulares_populares_20230715.csv
-        - NAME_DATA_EXTRACTED_FILE=celulares_populares_20230715.csv
+        - MAX_RETRIES=10
+        - NAME_LINKS_FILE=links_celulares_populares.csv
+        - NAME_DATA_EXTRACTED_FILE=celulares_populares.csv
 ```
 The environment variables are the same as in the previous section. The variables provided above is an example for the category "Celulares y telecomunicaciones -> Marcas populares -> Teléfonos móviles". Here we are indicate that the web scraper will extract the information of the first page of the category, and the output files will be saved in the folder "data_extracted" in the container but how we use volume to persist the data, the files extracted will be saved on the local path indicated. We can change the value of the environment variables to extract the information of more pages or change the category to scrape.
 

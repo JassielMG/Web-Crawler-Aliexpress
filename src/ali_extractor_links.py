@@ -27,19 +27,37 @@ class LinkExtractor:
         for i in range(1,n_pages+1):
             self.urls.append(url % str(i))
 
-    async def get_links(self,session,url):
-        ssl_context = ssl.create_default_context()
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
+    async def get_links(self, session, url, max_retries=int(os.getenv('MAX_RETRIES'))):
+        for retry in range(1, max_retries + 1):
+            try:
+                ssl_context = ssl.create_default_context()
+                ssl_context.check_hostname = False
+                ssl_context.verify_mode = ssl.CERT_NONE
 
-        async with session.get(url, ssl=ssl_context) as response:
-            html = await response.text()
-            soup = BeautifulSoup(html, 'html.parser')
-            html_doc = soup.prettify()  # non-rendered html
+                async with session.get(url, ssl=ssl_context) as response:
+                    html = await response.text()
+                    soup = BeautifulSoup(html, 'html.parser')
+                    html_doc = soup.prettify()  # non-rendered html
 
-            ids = re.findall(r'"productId"\:"(\d+)', html_doc)
-            products_id = [i for i in ids]
-            return products_id
+                    ids = re.findall(r'"productId"\:"(\d+)', html_doc)
+                    products_id = [i for i in ids]
+
+                    if products_id:
+                        return products_id
+                    else:
+                        print("Empty product ID list. Retrying...")
+
+            except Exception as e:
+                # Handle the exception as needed
+                print(f"An error occurred while trying to get the links: {e}")
+
+            if retry < max_retries:
+                print(f"Retry attempt to extract links {retry}/{max_retries}.")
+            else:
+                print("Maximum number of retries reached. Failed to get the links.")
+                break
+
+        return []
 
     async def extract_links(self):
         link = []

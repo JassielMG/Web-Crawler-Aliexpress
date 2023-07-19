@@ -1,7 +1,7 @@
 version: '3'
 services:
   celulares-populares2:
-    image: ali-crawler2
+    image: aliexpress
     volumes:
       - /Users/jassielmg/Documents/data_extracted:/app/data_extracted:rw
     environment:
@@ -9,7 +9,8 @@ services:
         - CATEGORY_LEVEL1=Celulares y telecomunicaciones
         - CATEGORY_LEVEL2=Marcas populares
         - CATEGORY_LEVEL3=Teléfonos móviles
-        - N_PAGES=1
-        - NAME_LINKS_FILE=links_celulares_populares_20230715.csv
-        - NAME_DATA_EXTRACTED_FILE=celulares_populares_20230715.csv
+        - N_PAGES=60
+        - MAX_RETRIES=20
+        - NAME_LINKS_FILE=links_celulares_populares_20230720.csv
+        - NAME_DATA_EXTRACTED_FILE=celulares_populares_20230720.csv
 

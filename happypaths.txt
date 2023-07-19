@@ -1,13 +1,14 @@
-
+# Happy path to running the crawler in a docker image
 docker build \
   --build-arg URL_BY_CATEGORY=https://es.aliexpress.com/category/204028002/wearable-devices.html?category_redirect=1&spm=a2g0o.productlist.105.29.7c7a4e2cjIB3vv&CatId=204028002&trafficChannel=main&isCategoryBrowse=true&g=y&page=%s \
   --build-arg CATEGORY_LEVEL1=Celulares y telecomunicaciones \
   --build-arg CATEGORY_LEVEL2=Electrónica \
   --build-arg CATEGORY_LEVEL3=Dispositivos Inteligentes \
   --build-arg N_PAGES=50 \
+  --build-arg MAX_RETRIES=3 \
   --build-arg NAME_LINKS_PATH=data_extracted/links_dispositivos_inteligentes.csv \
   --build-arg NAME_SAVED_PATH=data_extracted/dispositivos_inteligentes.csv \
-  -t myproject .
+  -t myimage .
 
 docker run \
   --env URL_BY_CATEGORY='https://es.aliexpress.com/category/204028002/wearable-devices.html?category_redirect=1&spm=a2g0o.productlist.105.29.7c7a4e2cjIB3vv&CatId=204028002&trafficChannel=main&isCategoryBrowse=true&g=y&page=%s'\
@@ -19,12 +20,16 @@ docker run \
   --env NAME_DATA_EXTRACTED_FILE='dispositivos_inteligentes.csv' \
   --name cela4 ali-express-crawler
 
+# Happypahts to configure the crawler in a local environment or with docker-compose
+# Use the follow information to complete the .env file in the root of the project or the docker-compose.yml file
+# if you are using PyCharm you can set the environment variables in the run configuration
 
 URL_BY_CATEGORY=https://es.aliexpress.com/category/205896701/cover-up.html?category_redirect=1&spm=a2g0o.productlist.101.15.c66a4b32hVlrcR&CatId=205896701&trafficChannel=main&isCategoryBrowse=true&g=y&page=%s
 CATEGORY_LEVEL1=Moda Mujer
 CATEGORY_LEVEL2=Bañadores
 CATEGORY_LEVEL3=Vestidos de playa
 N_PAGES=50
+MAX_RETRIES=3
 NAME_LINKS_PATH=data_extracted/links_vestidos_playa.csv
 NAME_SAVED_PATH=data_extracted/vestidos-de-playa.csv
 
@@ -33,6 +38,7 @@ URL_BY_CATEGORY=https://es.aliexpress.com/category/204006047/cellphones.html?cat
 CATEGORY_LEVEL1=Celulares y telecomunicaciones
 CATEGORY_LEVEL2=Marcas populares
 CATEGORY_LEVEL3=Teléfonos móviles
-N_PAGES=60
+N_PAGES=1
+MAX_RETRIES=3
 NAME_LINKS_PATH=data_extracted/links-telefonos_populares.csv
 NAME_SAVED_PATH=data_extracted/telefonos-moviles-populares.csv

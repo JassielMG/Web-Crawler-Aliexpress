@@ -11,41 +11,55 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-async def get_rendered_html(url):
+async def get_rendered_html(url, max_retries=int(os.getenv('MAX_RETRIES'))):
     """
-    This function uses Selenium to render the HTML of the given URL and returns it
+    This function uses Selenium to render the HTML of the given URL and returns it,
+    with support for multiple retries in case of errors.
     :param url: URL to render
-    :return: rendered HTML
+    :param max_retries: maximum number of retries
+    :return: rendered HTML or None if all retries fail
     """
-    try:
-        options = ChromiumOptions()
-        options.add_argument('--headless')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-setuid-sandbox')
-        driver_path = "/usr/bin/chromedriver" #os.getenv('CHROME_DRIVER_PATH')
-        service = Service(driver_path)
+    for retry in range(1, max_retries + 1):
+        try:
+            options = ChromiumOptions()
+            options.add_argument('--headless')
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-setuid-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--disable-gpu')
 
-        # Create a new instance of the Chrome driver with the chromedriver path
-        driver = webdriver.Chrome(service=service, options=options)
+            driver_path = "/usr/bin/chromedriver"
+            service = Service(driver_path)
 
-        # Navigate to the URL
-        driver.get(url)
+            # Create a new instance of the Chrome driver with the chromedriver path
+            driver = webdriver.Chrome(service=service, options=options)
 
-        # Get the rendered HTML
-        rendered_html = driver.page_source
+            driver.set_page_load_timeout(20)
 
-        # Close the browser
-        driver.quit()
+            # Navigate to the URL
+            driver.get(url)
 
-        # Parse the HTML using BeautifulSoup
-        soup = BeautifulSoup(rendered_html, 'html.parser')
-        rendered_html = soup.prettify()
+            # Get the rendered HTML
+            rendered_html = driver.page_source
 
-        return rendered_html
-    except Exception as e:
-        # Handle the exception as needed
-        print(f"Error al renderizar el HTML de {url}: {str(e)}")
-        return None
+            # Close the browser
+            driver.quit()
+
+            # Parse the HTML using BeautifulSoup
+            soup = BeautifulSoup(rendered_html, 'html.parser')
+            rendered_html = soup.prettify()
+
+            return rendered_html
+
+        except Exception as e:
+            # Handle other exceptions
+            print(f"An error ocurred while rendering the HTML of {url}: {str(e)}")
+
+        if retry < max_retries:
+            print(f"Retry attempt {retry} of {max_retries} to render {url}")
+        else:
+            print(f"Max retries reached to render {url}. Skipping...")
+    return None
 
 
 def crawl_url(url, html, cat1, cat2, cat3):

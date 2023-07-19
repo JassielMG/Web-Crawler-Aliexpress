@@ -41,6 +41,7 @@ async def main():
         if len(url) > 0:
             loop = False
         print(url)
+        print("links extracted: " + str(len(url)))
 
     start = time.time()
     data = []
