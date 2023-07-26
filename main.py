@@ -4,6 +4,7 @@ import time
 import asyncio
 from src import ali_crawler_runner
 import humanize
+from src.s3_data_uploader import upload_file_to_s3
 
 
 async def run_extractor_links():
@@ -60,6 +61,13 @@ async def main():
 
     # Saving the data to a CSV file
     print(ali_crawler_runner.save_data_to_csv(data))
+
+    # Upload the file to S3
+    if os.getenv("SAVE_TO_S3") == "True":
+        s3_saved = upload_file_to_s3("data_extracted/" + os.getenv("NAME_DATA_EXTRACTED_FILE"), os.getenv("S3_BUCKET_NAME"), os.getenv("NAME_DATA_EXTRACTED_FILE"))
+        if s3_saved:
+            print("File saved in S3 successfully")
+
     end = time.time()
 
     print("\n ------------------- Extraction Summary ------------------- \n")
@@ -72,6 +80,7 @@ async def main():
     print(f".-Total failed products extracted : {c1 - c2}")
     print(f".-Time spent during crawling: {time.strftime('%H:%M:%S', time.gmtime(end - start))}")
     print(".-Saved file name: " + os.getenv("NAME_DATA_EXTRACTED_FILE"))
+    print(".-Data saved in S3 bucket: " + os.getenv("S3_BUCKET_NAME")) if os.getenv("SAVE_TO_S3") == "True" else print(".-Data saved only in your local machine.")
     print(".-Size file: " + humanize.naturalsize(os.path.getsize("data_extracted/" + os.getenv("NAME_DATA_EXTRACTED_FILE"))))
 
 if __name__ == "__main__":

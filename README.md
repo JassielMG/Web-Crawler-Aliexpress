@@ -35,6 +35,29 @@ The variables you need to configure are as follows:
 - `NAME_LINKS_PATH`: Path and filename to store the extracted links.
 - `NAME_SAVED_PATH`: Path and filename of the output file to save the extracted data.
 
+
+#### If you want to save the data on aws s3 follow the next steps the other way skip this step if you prefer save the data in a local path:
+
+a.- If you want to save the data in a S3 bucket on aws, you can configure the following environment variables:
+- `SAVE_TO_S3`: True if you want to save the data in a S3 bucket, False otherwise.
+- `AWS_ACCESS_KEY_ID`: Your AWS access key ID.
+- `AWS_SECRET_ACCESS_KEY`: Your AWS secret access key.
+- `AWS_REGION`: Your AWS region.
+- `AWS_BUCKET_NAME`: Your AWS bucket name.
+
+
+b.- Or other option i recommend using the aws cli to interact with amazon services from your local environment, you can download it from the following link:
+https://aws.amazon.com/es/cli/
+
+You need to configure the aws credentials for use cli and interative with the services, you can do it with the following command:
+```bash
+aws configure
+```
+The credentials will be stored in a file in your home directory, under ~/.aws/credentials (Linux & Mac) or C:\Users\USERNAME\.aws\credentials (Windows).
+
+once you have configured aws cli you can execute the program and indicate if you want to save your data in any bucket, the boto3 sdk will automatically take the keys configured in your aws cli. (**only if you work on your local machine**)
+
+
 3.- Run the main file to start the web scraper:
 
 ```bash
@@ -71,14 +94,23 @@ services:
         - N_PAGES=1
         - MAX_RETRIES=10
         - NAME_LINKS_FILE=links_celulares_populares.csv
-        - NAME_DATA_EXTRACTED_FILE=celulares_populares.csv
+        - NAME_DATA_EXTRACTED_FILE=celulares_populares.csv 
+        - SAVE_TO_S3=False 
+        - AWS_ACCESS_KEY_ID=
+        - AWS_SECRET_ACCESS_KEY=
+        - AWS_REGION=
+        - AWS_BUCKET_NAME=
+
 ```
 The environment variables are the same as in the previous section. The variables provided above is an example for the category "Celulares y telecomunicaciones -> Marcas populares -> Teléfonos móviles". Here we are indicate that the web scraper will extract the information of the first page of the category, and the output files will be saved in the folder "data_extracted" in the container but how we use volume to persist the data, the files extracted will be saved on the local path indicated. We can change the value of the environment variables to extract the information of more pages or change the category to scrape.
+
+If you need to save the data in a S3 bucket on aws, you must set the variable SAVE_TO_S3 as True and configure the other variables related to aws credentials. The other way the data only will save in the local path indicated.
 
 **Notes:**
 * Make sure that the local path for saving the data exists before running the docker-compose up command.
 * The image name must match the one you created in the previous step.
 * You can create multiple containers with different configurations. In the example above, a container named "celphones-container" was created, but you can create additional containers with different configurations based on the category.
+* A good practice is use secrets to store the credentials of aws, you can use docker secrets to do it, you can find more information in the following link: https://docs.docker.com/engine/swarm/secrets/
 
 4.- Run the docker-compose file:
 ```bash 

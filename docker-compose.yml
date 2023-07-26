@@ -9,8 +9,31 @@ services:
         - CATEGORY_LEVEL1=Celulares y telecomunicaciones
         - CATEGORY_LEVEL2=Marcas populares
         - CATEGORY_LEVEL3=Teléfonos móviles
-        - N_PAGES=60
+        - N_PAGES=1
         - MAX_RETRIES=20
-        - NAME_LINKS_FILE=links_celulares_populares_20230720.csv
-        - NAME_DATA_EXTRACTED_FILE=celulares_populares_20230720.csv
+        - NAME_LINKS_FILE=links_celulares_populares.csv
+        - NAME_DATA_EXTRACTED_FILE=celulares_populares.csv
+        - SAVE_TO_S3=False
+        - S3_BUCKET_NAME=
+        - AWS_ACCESS_KEY_ID=
+        - AWS_SECRET_ACCESS_KEY=
+        - AWS_DEFAULT_REGION=
 
+  moda_mujer:
+    image: aliexpress
+    volumes:
+      - /Users/jassielmg/Documents/data_extracted:/app/data_extracted:rw
+    environment:
+        - URL_BY_CATEGORY=https://es.aliexpress.com/category/205896701/cover-up.html?category_redirect=1&spm=a2g0o.productlist.101.15.c66a4b32hVlrcR&CatId=205896701&trafficChannel=main&isCategoryBrowse=true&g=y&page=%s
+        - CATEGORY_LEVEL1=Moda Mujer
+        - CATEGORY_LEVEL2=Bañadores
+        - CATEGORY_LEVEL3=Vestidos de playa
+        - N_PAGES=1
+        - MAX_RETRIES=20
+        - NAME_LINKS_FILE=links_vestidos_de_playa.csv
+        - NAME_DATA_EXTRACTED_FILE=vestidos_de_playa.csv
+        - SAVE_TO_S3=False
+        - S3_BUCKET_NAME=aliexpress-raw-us-east-2-data
+        - AWS_ACCESS_KEY_ID=
+        - AWS_SECRET_ACCESS_KEY=
+        - AWS_DEFAULT_REGION=
